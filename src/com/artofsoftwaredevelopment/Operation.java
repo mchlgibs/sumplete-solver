@@ -63,7 +63,9 @@ class ReevaluateRowOperation implements Operation {
     public void execute(Solver solver) {
         PossibleRCSolutions thisRow = solver.rowConstraints[row];
 
-        if (thisRow.size() == 1) {
+        if (thisRow.size() == 0) {
+            throw new IllegalStateException();
+        } else if (thisRow.size() == 1) {
             IndexSet theSolution = thisRow.get(0);
             for (int column = 0; column < solver.board.size; column++) {
                 if (theSolution.contains(column)) {
@@ -73,7 +75,17 @@ class ReevaluateRowOperation implements Operation {
                 }
             }
         } else {
-            throw new RuntimeException("Not implemented");
+            IndexSet intersection = IndexSet.intersection(thisRow);
+            for (int column : intersection) {
+                solver.todoQueue.add(new CircleOperation(new Cell(row, column)));
+            }
+
+            IndexSet union = IndexSet.union(thisRow);
+            for (int column = 0; column < solver.board.size; column++) {
+                if (!union.contains(column)) {
+                    solver.todoQueue.add(new CrossOutOperation(new Cell(row, column)));
+                }
+            }
         }
     }
 }
@@ -90,7 +102,9 @@ class ReevaluateColumnOperation implements Operation {
     public void execute(Solver solver) {
         PossibleRCSolutions thisColumn = solver.columnConstraints[column];
 
-        if (thisColumn.size() == 1) {
+        if (thisColumn.size() == 0) {
+            throw new IllegalStateException();
+        } if (thisColumn.size() == 1) {
             IndexSet theSolution = thisColumn.get(0);
             for (int row = 0; row < solver.board.size; row++) {
                 if (theSolution.contains(row)) {
@@ -100,7 +114,17 @@ class ReevaluateColumnOperation implements Operation {
                 }
             }
         } else {
-            throw new RuntimeException("Not implemented");
+            IndexSet intersection = IndexSet.intersection(thisColumn);
+            for (int row : intersection) {
+                solver.todoQueue.add(new CircleOperation(new Cell(row, column)));
+            }
+
+            IndexSet union = IndexSet.union(thisColumn);
+            for (int row = 0; row < solver.board.size; row++) {
+                if (!union.contains(row)) {
+                    solver.todoQueue.add(new CrossOutOperation(new Cell(row, column)));
+                }
+            }
         }
     }
 }

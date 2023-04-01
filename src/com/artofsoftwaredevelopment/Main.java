@@ -49,7 +49,7 @@ public class Main {
         );
     }
     public static void main(String[] args) {
-        Board board = board3x3();
+        Board board = board9x9();
         Solver solver = new Solver(board);
         solver.solve();
         solver.solution.print();
