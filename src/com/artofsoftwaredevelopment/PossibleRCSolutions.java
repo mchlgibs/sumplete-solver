@@ -25,4 +25,12 @@ public class PossibleRCSolutions extends ArrayList<IndexSet> {
         }
         return result;
     }
+
+    public void filterWith(int index) {
+        removeIf((set) -> !set.contains(index));
+    }
+
+    public void filterWithout(int index) {
+        removeIf((set) -> set.contains(index));
+    }
 }

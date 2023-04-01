@@ -1,10 +1,14 @@
 package com.artofsoftwaredevelopment;
 
+import java.util.LinkedList;
+import java.util.Queue;
+
 public class Solver {
     public Board board;
     public Solution solution;
     public PossibleRCSolutions[] rowConstraints;
     public PossibleRCSolutions[] columnConstraints;
+    public Queue<Operation> todoQueue;
 
     public Solver(Board board) {
         this.board = board;
@@ -17,6 +21,15 @@ public class Solver {
         columnConstraints = new PossibleRCSolutions[board.size];
         for (int column = 0; column < board.size; column++) {
             columnConstraints[column] = getPossibleSolutionsForColumn(board, column);
+        }
+
+        todoQueue = new LinkedList<>();
+
+        for (int row = 0; row < board.size; row++) {
+            todoQueue.add(new ReevaluateRowOperation(row));
+        }
+        for (int column = 0; column < board.size; column++) {
+            todoQueue.add(new ReevaluateColumnOperation(column));
         }
     }
 
@@ -55,6 +68,9 @@ public class Solver {
     }
 
     public void solve() {
-        // Do something here
+        while (!todoQueue.isEmpty()) {
+            Operation op = todoQueue.poll();
+            op.execute(this);
+        }
     }
 }
