@@ -15,6 +15,9 @@ public class Solution {
             }
         }
     }
+    public Solution(Solution other) {
+        this.values = other.values.clone();
+    }
 
     public void print() {
 
@@ -37,5 +40,16 @@ public class Solution {
             }
             System.out.println();
         }
+    }
+
+    public Cell getFirstUnsolved() {
+        for (int row = 0; row < values.length; row++) {
+            for (int column = 0; column < values.length; column++) {
+                if (values[row][column] == ' ') {
+                    return new Cell(row, column);
+                }
+            }
+        }
+        return null;
     }
 }

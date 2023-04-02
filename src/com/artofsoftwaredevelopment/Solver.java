@@ -33,6 +33,14 @@ public class Solver {
         }
     }
 
+    public Solver(Solver other) {
+        this.board = other.board;
+        this.solution = new Solution(other.solution);
+        this.rowConstraints = other.rowConstraints.clone();
+        this.columnConstraints = other.columnConstraints.clone();
+        this.todoQueue = new LinkedList<>();
+    }
+
     private PossibleRCSolutions getPossibleSolutionsForRow(Board board, int row) {
         PossibleRCSolutions allSubsets = PossibleRCSolutions.getAllPosibilities(board.size);
 
@@ -72,5 +80,31 @@ public class Solver {
             Operation op = todoQueue.poll();
             op.execute(this);
         }
+
+        Cell firstUnsolved = solution.getFirstUnsolved();
+        if (firstUnsolved != null) {
+            guessAndContinue(firstUnsolved);
+        }
+    }
+
+    private void guessAndContinue(Cell firstUnsolved) {
+        try {
+            Solver circleSolver = new Solver(this);
+            circleSolver.todoQueue.add(new CircleOperation(firstUnsolved));
+            circleSolver.solve();
+            this.solution = circleSolver.solution;
+            assert(this.solution.getFirstUnsolved() == null);
+        } catch (Exception ignored) {
+
+        }
+
+        try {
+            Solver crossOutSolver = new Solver(this);
+            crossOutSolver.todoQueue.add(new CrossOutOperation(firstUnsolved));
+            crossOutSolver.solve();
+            this.solution = crossOutSolver.solution;
+        } catch (Exception ignored) {
+        }
+        assert(this.solution.getFirstUnsolved() == null);
     }
 }
