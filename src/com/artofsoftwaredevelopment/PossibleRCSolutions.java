@@ -3,7 +3,7 @@ package com.artofsoftwaredevelopment;
 import java.util.ArrayList;
 
 public class PossibleRCSolutions extends ArrayList<IndexSet> {
-    public static PossibleRCSolutions getAllPosibilities(int size) {
+    public static PossibleRCSolutions getAllPossibilities(int size) {
         PossibleRCSolutions result = new PossibleRCSolutions();
 
         final IndexSet emptySet = new IndexSet();

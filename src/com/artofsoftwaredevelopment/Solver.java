@@ -42,7 +42,7 @@ public class Solver {
     }
 
     private PossibleRCSolutions getPossibleSolutionsForRow(Board board, int row) {
-        PossibleRCSolutions allSubsets = PossibleRCSolutions.getAllPosibilities(board.size);
+        PossibleRCSolutions allSubsets = PossibleRCSolutions.getAllPossibilities(board.size);
 
         int rowSum = board.rowSums[row];
         PossibleRCSolutions results = new PossibleRCSolutions();
@@ -59,7 +59,7 @@ public class Solver {
     }
 
     private PossibleRCSolutions getPossibleSolutionsForColumn(Board board, int column) {
-        PossibleRCSolutions allSubsets = PossibleRCSolutions.getAllPosibilities(board.size);
+        PossibleRCSolutions allSubsets = PossibleRCSolutions.getAllPossibilities(board.size);
 
         int columnSum = board.columnSums[column];
         PossibleRCSolutions results = new PossibleRCSolutions();
